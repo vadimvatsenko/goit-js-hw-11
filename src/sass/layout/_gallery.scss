@@ -1,0 +1,38 @@
+.gallery {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+
+.gallery-section {
+    display: flex;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.info {
+
+    margin-top: auto;
+    display: block;
+}
+
+.info-item {
+    text-decoration: none;
+}
+
+.photo-card {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #808080;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+
+
+}
+
+.photo-card__img {
+    object-fit: cover;
+}

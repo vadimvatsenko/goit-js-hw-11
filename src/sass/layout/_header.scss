@@ -1,12 +1,8 @@
 .header {
-    min-height: 80px;
-    background-image: repeating-linear-gradient(-90deg,
-            #606dbc,
-            #606dbc 10px,
-            #465298 10px,
-            #465298 20px);
 
-    border-radius: 10px;
+    min-height: 80px;
+    border-bottom: 2px solid #808080;
+
 
     display: flex;
     align-items: center;
