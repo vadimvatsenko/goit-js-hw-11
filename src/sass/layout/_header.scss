@@ -1,5 +1,6 @@
 .header {
     position: fixed;
+    z-index: 2;
     width: 100%;
     left: 0;
     min-height: 80px;
@@ -30,13 +31,14 @@
 
 }
 
-.search-form button {
+.search-form button,
+.load-more {
     margin-left: 10px;
 
     cursor: pointer;
 
     height: 50px;
-    width: 100px;
+    min-width: 100px;
 
     background-color: #ffd180;
 
@@ -51,4 +53,18 @@
     &:focus {
         background-color: #f6ba52;
     }
+}
+
+.load-more.is-hidden {
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    height: 1px;
+
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    margin: -1px;
 }

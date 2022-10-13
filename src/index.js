@@ -1,87 +1,49 @@
-const axios = require('axios').default;
+// const axios = require('axios').default;
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
+import { createMarkup } from './js/createMarkup';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-const refs = {
-    searchField: document.querySelector('#search-form'),
-    gallery: document.querySelector('.gallery'),
-    
-};
+import { getRefs } from './js/getRefs';
+import { searchImg } from './js/API';
+
+const refs = getRefs();
+
+
+
 
 refs.searchField.addEventListener('submit', handleSubmit);
 
 function handleSubmit(e) {
     e.preventDefault();
     const searchWord = e.currentTarget.searchQuery.value;
+    console.log(searchWord);
 
     searchImg(searchWord).then(data => {
-        createMarkup(data.hits);
-
-
-    }).catch(error => {
+        Notify.success(`Hooray! We found ${data.totalHits} images.`);
+        refs.getGallery.innerHTML = createMarkup(data.hits);
+        runSimpleLightBox();
+       
+        }).catch(error => {
         console.log(error);
         
     });
 
-    
 }
 
+function runSimpleLightBox() {
+     lightbox = new SimpleLightbox('.gallery .gallery__link', {
+            captionsData: 'alt',
+            captionDelay: 250,
+     });
+    lightbox.refresh();
+}
 
-const API_KEY = '29703536-3492bea623abb7896113a32cf';
-const BASE_URL = 'https://pixabay.com/api/';
-const SEARCH_SETTINGS = 'image_type=photo&orientation=horizontal&safesearch=true&page=1&per_page=40';
-const options = {
-    headers: {
-        Authorization: API_KEY,
-    },
+refs.searchBtn.addEventListener('click', test);
+
+function test() {
+    console.log('click')
+    refs.loadMoreBtn.classList.toggle('is-hidden');
+   
 };
 
-
-
-function searchImg(name) {
-    return fetch(`${BASE_URL}?key=${API_KEY}&q=${name}&${SEARCH_SETTINGS}`)
-        .then((response) => {
-              if (!response.ok) {
-        throw new Error(response.status);
-      }
-            return response.json();
-    });
-}
-
-function createMarkup(e) {
-    const markup = e.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-        return `
-                <a class ="gallery__link "href ="${largeImageURL}">
-                    <div class="photo-card">
-                        <img class = "photo-card__img" src="${webformatURL}" alt="${tags}" loading="lazy" width = 270 />
-                            <div class="info">
-                                <p class="info-item">
-                                    <b>Likes: </b>
-                                    <b>${likes}</b>
-                                </p>
-                                <p class="info-item">
-                                    <b>Views: </b>
-                                    <b>${views}</b>
-                                </p>
-                                <p class="info-item">
-                                    <b>Comments: </b>
-                                    <b>${comments}</b>
-                                </p>
-                                <p class="info-item">
-                                    <b>Downloads: </b>
-                                    <b>${downloads}</b>
-                                </p>
-                        </div>
-                    </div>
-                </a>`;
-    }).join('');
-    refs.gallery.innerHTML = markup;
-
-}
-
-
-
-let lightbox = new SimpleLightbox('.gallery .gallery__link');
-lightbox.on();
