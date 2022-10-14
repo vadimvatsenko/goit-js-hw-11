@@ -55,7 +55,14 @@
     }
 }
 
-.load-more.is-hidden {
+.load-more {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+
+}
+
+.is-hidden {
     position: absolute;
     white-space: nowrap;
     width: 1px;
