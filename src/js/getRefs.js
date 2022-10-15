@@ -4,7 +4,7 @@ export function getRefs() {
     searchField: document.querySelector('#search-form'),
     getGallery: document.querySelector('.gallery'),
     searchBtn: document.querySelector("#button-submit"),
-    loadMoreBtn: document.querySelector('.load-more'),
+    // loadMoreBtn: document.querySelector('.load-more'),
     
     };
 };

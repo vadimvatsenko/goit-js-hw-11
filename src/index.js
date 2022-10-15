@@ -1,24 +1,16 @@
 const axios = require('axios').default;
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { createMarkup } from './js/createMarkup';
+import { createMarkup } from './js/createMarkup';// шаблон разметки
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-
-import { getRefs } from './js/getRefs';
-// import { searchImg } from './js/API';
-
+import LoadMoreBtn from './js/loadMoreBtn';// импорт кнопки loadmorebtn
+import { getRefs } from './js/getRefs';// импорт рефов
 import NewAPI from './js/API'// импортирую класс
 
 const newApiService = new NewAPI();// экземпляр класса для получения методов и свойств
-
-
 const refs = getRefs();// получаем рефы
 
-let lightbox;
-
 refs.searchField.addEventListener('submit', handleSubmit);
-
-
 
 function handleSubmit(e) {
     e.preventDefault();
@@ -26,50 +18,55 @@ function handleSubmit(e) {
 
     if (newApiService.query === '') {
         clearMarkup();
+        loadMoreBtn.hide();
         return Notify.failure('Request cannot be empty');
+        
     }
 
+    loadMoreBtn.show();//показать кнопку
+    clearMarkup();//
     newApiService.resetPage(); // cбрасываем страницу
-    newApiService.fetchArticles() // вызываем fetchArticles в API не нужно передавать слово, так как оно записано сеттером выше
-        .then(card => {
-            clearMarkup();
-            runMarkup(card);
-            runSimpleLightBox() // вызов SimpleLightBox
-    })
+    runSimpleLightBox();
+    fetchAll();
 
 }
 
-refs.loadMoreBtn.addEventListener('click', onLoadMore);
-function onLoadMore() {
-    newApiService.fetchArticles()
-    .then(card => {
-        runMarkup(card); //функция разметки
-        runSimpleLightBox(); // вызов SimpleLightBox
-        
-        
-    })
-};
+const loadMoreBtn = new LoadMoreBtn({
+    selector: '.load-more',
+    hidden: true,
+});// теперь реф для кнопки loadmore не нужен
+console.log(loadMoreBtn);
 
-function runMarkup(c) {
+loadMoreBtn.refs.button.addEventListener('click', fetchAll);// обращение к кнопке через класс
+
+
+function fetchAll() {
+    loadMoreBtn.disable();
+    newApiService.fetchArticles()
+        .then(card => {
+            loadMoreBtn.enable();
+            runMarkup(card); //функция разметки
+           lightbox.refresh(); // обновить lightbox
+        });
+}
+
+function runMarkup(c) {// создание разметки
     refs.getGallery.insertAdjacentHTML('beforeend', createMarkup(c));
 }
 
-function clearMarkup() {
+function clearMarkup() {// очистка разметки
     refs.getGallery.innerHTML = '';
 }
 
-
-
-
-
-
 function runSimpleLightBox() {
-   lightbox = new SimpleLightbox('.gallery .gallery__link', {
+    lightbox = new SimpleLightbox('.gallery .gallery__link', {
         captionsData: 'alt',
         captionDelay: 250,
-    }).refresh()
+    });
 
 }
+
+
 
 
 

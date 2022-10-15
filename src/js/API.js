@@ -7,7 +7,7 @@ export default class NewApi {
         console.log(this)
         const API_KEY = '29703536-3492bea623abb7896113a32cf';
         const BASE_URL = 'https://pixabay.com/api/';
-        const SEARCH_SETTINGS = `image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=4`;
+        const SEARCH_SETTINGS = `image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`;
         const URL = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&${SEARCH_SETTINGS}`;
 
        return fetch(URL)// возращаем данные промиса во внешний код
@@ -16,7 +16,7 @@ export default class NewApi {
                
                this.incrementPage();// если запрос успешный то увеличиваем страницу на 1
                console.log(data.hits)
-               return data.hits; //возращаем данные промиса во внешний код
+               return data.hits; //возвращаем данные промиса во внешний код
         });
     }
     incrementPage() {
@@ -33,28 +33,4 @@ export default class NewApi {
         this.searchQuery = newQeury;
     }
 
-
 }
-
-
-
-
-
-
-
-
-
-// const API_KEY = '29703536-3492bea623abb7896113a32cf';
-// const BASE_URL = 'https://pixabay.com/api/';
-// const SEARCH_SETTINGS = `image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
-
-
-// export function searchImg(name) {
-//     return fetch(`${BASE_URL}?key=${API_KEY}&q=${name}&${SEARCH_SETTINGS}`)
-//         .then((response) => {
-//               if (!response.ok) {
-//         throw new Error(response.status);
-//       }
-//             return response.json();
-//     });
-// }
