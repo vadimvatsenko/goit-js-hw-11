@@ -1,4 +1,5 @@
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+export { emptySearchMessage, noImagesFoundMessage, imagesFoundMessage, endOfSearchMessage };
 
 export default class NewApi {
     constructor() {
@@ -13,22 +14,27 @@ export default class NewApi {
 
        return fetch(URL)// возращаем данные промиса во внешний код
             .then(response => response.json())
-           .then(data => {
-               if (data) {
-                    Notify.success(`Hooray! We found ${data.totalHits} images.`);
-                }
-               if (this.page * 40 > data.totalHits) {
-                   Notify.info("We're sorry, but you've reached the end of search results.");
-               }
+            .then(data => {
+            //    if (this.page === 1) {
+                  
+            //     }
+            //    if (this.page * 40 > data.totalHits) {
+            //        endOfSearchMessage();
+
+            //    }
                this.incrementPage();// если запрос успешный то увеличиваем страницу на 1
-               return data.hits; //возвращаем данные промиса во внешний код
+               return data.hits ; //возвращаем данные промиса во внешний код
         });
     }
+  
     incrementPage() {
         this.page += 1;
     }
     resetPage() {
         this.page = 1;
+    }
+    get currentPage() {
+        return this.page;
     }
     get query() {
         return this.searchQuery// если нужно будет получить значение query

@@ -2,7 +2,7 @@ export default class LoadMoreBtn {
   constructor({ selector, hidden = false }) {//селектор кнопки и спрятана и не спрятана
     this.refs = this.getRefs(selector);
 
-    hidden && this.hide();//если hidden true то вызываем hide() - && - в этом месте как if
+    hidden && this.hide();//если hidden true то вызываем hide() - , && - в этом месте как if
   }
 
   getRefs(selector) {
