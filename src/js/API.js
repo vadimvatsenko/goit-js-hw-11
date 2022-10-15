@@ -1,10 +1,11 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 export default class NewApi {
     constructor() {
         this.searchQuery = ''// по умолчанию форма пуста, класс должен хранить эту информацию
-        this.page = 1;// по умолчаю страница 1
+        this.page = 1;// по умолчанию страница 1
     }// конструктор
     fetchArticles() {// ничего не будем получать
-        console.log(this)
         const API_KEY = '29703536-3492bea623abb7896113a32cf';
         const BASE_URL = 'https://pixabay.com/api/';
         const SEARCH_SETTINGS = `image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`;
@@ -13,9 +14,13 @@ export default class NewApi {
        return fetch(URL)// возращаем данные промиса во внешний код
             .then(response => response.json())
            .then(data => {
-               
+               if (data) {
+                    Notify.success(`Hooray! We found ${data.totalHits} images.`);
+                }
+               if (this.page * 40 > data.totalHits) {
+                   Notify.info("We're sorry, but you've reached the end of search results.");
+               }
                this.incrementPage();// если запрос успешный то увеличиваем страницу на 1
-               console.log(data.hits)
                return data.hits; //возвращаем данные промиса во внешний код
         });
     }

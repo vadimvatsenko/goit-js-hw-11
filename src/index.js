@@ -7,6 +7,11 @@ import LoadMoreBtn from './js/loadMoreBtn';// импорт кнопки loadmore
 import { getRefs } from './js/getRefs';// импорт рефов
 import NewAPI from './js/API'// импортирую класс
 
+import { onScroll, onTopButton } from './js/scroll';
+
+onScroll();
+onTopButton();
+
 const newApiService = new NewAPI();// экземпляр класса для получения методов и свойств
 const refs = getRefs();// получаем рефы
 
@@ -21,14 +26,14 @@ function handleSubmit(e) {
         loadMoreBtn.hide();
         return Notify.failure('Request cannot be empty');
         
-    }
+    } 
 
-    loadMoreBtn.show();//показать кнопку
-    clearMarkup();//
-    newApiService.resetPage(); // cбрасываем страницу
-    runSimpleLightBox();
-    fetchAll();
-
+        loadMoreBtn.show();//показать кнопку
+        clearMarkup();//
+        newApiService.resetPage(); // cбрасываем страницу
+        runSimpleLightBox();
+        fetchAll();
+    
 }
 
 const loadMoreBtn = new LoadMoreBtn({
@@ -44,9 +49,14 @@ function fetchAll() {
     loadMoreBtn.disable();
     newApiService.fetchArticles()
         .then(card => {
+            if (card.length === 0) {
+                loadMoreBtn.hide();
+                return Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+            }
             loadMoreBtn.enable();
             runMarkup(card); //функция разметки
-           lightbox.refresh(); // обновить lightbox
+            lightbox.refresh(); // обновить lightbox
+            console.log(card.totalHits)
         });
 }
 
