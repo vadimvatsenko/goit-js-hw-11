@@ -10,6 +10,7 @@ import { emptySearchMessage, noImagesFoundMessage, imagesFoundMessage, endOfSear
 
 onScroll();//запуск скролла
 onTopButton();
+let lightbox;
 
 const newApiService = new NewAPI();// экземпляр класса для получения методов и свойств
 const refs = getRefs();// получаем рефы
