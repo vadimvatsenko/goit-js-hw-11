@@ -53,10 +53,7 @@ function fetchAll() {
     loadMoreBtn.disable();
     newApiService.fetchArticles()
         .then(card => {
-            console.log(card)
-            if (card === []) {
-                alert('tt')
-            }
+            
            
             loadMoreBtn.enable();
             runMarkup(card); //функция разметки

@@ -17,17 +17,17 @@ export default class NewApi {
        return fetch(URL)// возращаем данные промиса во внешний код
             .then(response => response.json())
            .then(data => {
-               console.log(data);
-               if (this.page === 1 && data.totalHits !== 0 ) {
-                   imagesFoundMessage(data.totalHits);
-               }
-               if (data.totalHits === 0) {
-                   noImagesFoundMessage();
-               }
-               if (this.page * 40 > data.totalHits && data.totalHits !== 0) {
-                   endOfSearchMessage();
+            //    console.log(data);
+            //    if (this.page === 1 && data.totalHits !== 0 ) {
+            //        imagesFoundMessage(data.totalHits);
+            //    }
+            //    if (data.totalHits === 0) {
+            //        noImagesFoundMessage();
+            //    }
+            //    if (this.page * 40 > data.totalHits && data.totalHits !== 0) {
+            //        endOfSearchMessage();
 
-               }
+            //    }
                this.incrementPage();// если запрос успешный то увеличиваем страницу на 1
                return data.hits ; //возвращаем данные промиса во внешний код
         });
