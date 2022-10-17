@@ -9,8 +9,8 @@ import { emptySearchMessage, noImagesFoundMessage, imagesFoundMessage, endOfSear
 
 onScroll();//запуск скролла
 onTopButton();
-let lightbox;
 
+let lightbox;
 function runSimpleLightBox() {
     lightbox = new SimpleLightbox('.gallery .gallery__link', {
         captionsData: 'alt',
@@ -61,7 +61,7 @@ function fetchAll() {
         .then(data => {
             const totalPage = Math.ceil(data.totalHits / 40);
 
-                loadMoreBtn.show();
+            loadMoreBtn.show();
             loadMoreBtn.disable();
             
             if (data.totalHits > 0) {
@@ -90,8 +90,6 @@ function fetchAll() {
             if (totalPage < newApiService.page && newApiService.page > 2) {
                 loadMoreBtn.hide();
                 endOfSearchMessage();
-                
-
         }
             
     });

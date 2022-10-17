@@ -22,7 +22,6 @@ export default class NewApi {
         try {
             const urlAXIOS = `?page=${this.page}&q=${this.query}`;
             const { data } = await axios.get(urlAXIOS, this.params);
-            console.log(data);
             this.incrementPage();
             return data;
             
