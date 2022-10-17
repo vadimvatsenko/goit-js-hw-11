@@ -111,28 +111,23 @@ function handleSubmit(e) {
     e.preventDefault();
     newApiService.query = e.currentTarget.searchQuery.value.trim();// записываем в query при помощи set введеную инвормацию в форму
     
+    
 
     if (newApiService.query === '') {
         clearMarkup();
-        // loadMoreBtn.hide();
         emptySearchMessage();
         return;
         
     } 
-
-   
-    clearMarkup();//очистить разметку
-    newApiService.resetPage(); // cбрасываем страницу на 1ю
-    runSimpleLightBox();// запустить lightbox
-    fetchAll();//
-    loadMoreBtn.show();//показать кнопку
-    
-
-    
-    
+        
+        clearMarkup();//очистить разметку
+        newApiService.resetPage(); // cбрасываем страницу на 1ю
+        runSimpleLightBox();// запустить lightbox
+        fetchAll();//
+        
 }
 
-export const loadMoreBtn = new LoadMoreBtn({
+const loadMoreBtn = new LoadMoreBtn({
     selector: '.load-more',
     hidden: true,
 });// теперь реф для кнопки loadmore не нужен
@@ -144,34 +139,37 @@ function onClickMoreBtn() {
 }
 
 function fetchAll() {
-    loadMoreBtn.disable();
+    
     newApiService.fetchArticles()
         .then(data => {
             const totalPage = Math.ceil(data.totalHits / 40);
+                loadMoreBtn.show();
+                loadMoreBtn.disable();
+            if (data.totalHits > 0) {
+                
+                loadMoreBtn.enable();
+                runMarkup(data.hits); //функция разметки
+                lightbox.refresh(); // обновить lightbox
+            }
             
-            console.log(totalPage);
-            loadMoreBtn.enable();
-            runMarkup(data.hits); //функция разметки
-            lightbox.refresh(); // обновить lightbox
-           
             if (data.totalHits === 0) {
                 loadMoreBtn.hide();
                 noImagesFoundMessage();
             }
+
             if (newApiService.page === 2 && data.totalHits !== 0) {
                 imagesFoundMessage(data.totalHits);
             }
+
             if (totalPage < newApiService.page && newApiService.page > 2) {
                 loadMoreBtn.hide();
                 endOfSearchMessage();
             }
-            if (data.totalHits <= 40) {
+            
+            if (data.totalHits < 40) {
                 loadMoreBtn.hide();
             }
-         
 
-            
-            
     });
 }
 
