@@ -92,6 +92,7 @@ import { emptySearchMessage, noImagesFoundMessage, imagesFoundMessage, endOfSear
 
 onScroll();//запуск скролла
 onTopButton();
+let lightbox;
 
 function runSimpleLightBox() {
     lightbox = new SimpleLightbox('.gallery .gallery__link', {
@@ -147,6 +148,7 @@ function fetchAll() {
     newApiService.fetchArticles()
         .then(data => {
             const totalPage = Math.ceil(data.totalHits / 40);
+            
             console.log(totalPage);
             loadMoreBtn.enable();
             runMarkup(data.hits); //функция разметки
@@ -157,12 +159,11 @@ function fetchAll() {
                 noImagesFoundMessage();
             }
             if (newApiService.page === 2 && data.totalHits !== 0) {
-
-                 imagesFoundMessage(data.totalHits);
+                imagesFoundMessage(data.totalHits);
             }
             if (totalPage < newApiService.page && newApiService.page > 2) {
                 loadMoreBtn.hide();
-                 endOfSearchMessage();
+                endOfSearchMessage();
             }
             if (data.totalHits <= 40) {
                 loadMoreBtn.hide();
