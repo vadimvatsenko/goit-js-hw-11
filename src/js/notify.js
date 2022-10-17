@@ -1,6 +1,6 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-export { emptySearchMessage, noImagesFoundMessage, imagesFoundMessage, endOfSearchMessage };
+
 
 function emptySearchMessage() {
     Notify.failure('The search string cannot be empty. Please specify your search query.');
@@ -18,3 +18,5 @@ function endOfSearchMessage() {
     Notify.info("We're sorry, but you've reached the end of search results.");
 
 }
+
+export { emptySearchMessage, noImagesFoundMessage, imagesFoundMessage, endOfSearchMessage };

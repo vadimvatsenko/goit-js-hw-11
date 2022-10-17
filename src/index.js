@@ -79,7 +79,7 @@
 // }
 
 
-import axios from 'axios';
+
 import { createMarkup } from './js/createMarkup';// шаблон разметки
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
@@ -88,10 +88,18 @@ import { getRefs } from './js/getRefs';// импорт рефов
 import NewAPI from './js/API'// импортирую класс
 import { onScroll, onTopButton } from './js/scroll';
 import { emptySearchMessage, noImagesFoundMessage, imagesFoundMessage, endOfSearchMessage } from './js/notify';
+// import { runSimpleLightBox } from './js/simpleLigthBoxSettings';
 
 onScroll();//запуск скролла
 onTopButton();
-let lightbox;
+
+function runSimpleLightBox() {
+    lightbox = new SimpleLightbox('.gallery .gallery__link', {
+        captionsData: 'alt',
+        captionDelay: 250,
+    });
+
+}
 
 const newApiService = new NewAPI();// экземпляр класса для получения методов и свойств
 const refs = getRefs();// получаем рефы
@@ -105,16 +113,18 @@ function handleSubmit(e) {
 
     if (newApiService.query === '') {
         clearMarkup();
-        loadMoreBtn.hide();
-        return emptySearchMessage();
+        // loadMoreBtn.hide();
+        emptySearchMessage();
+        return;
         
     } 
 
-    loadMoreBtn.show();//показать кнопку
+   
     clearMarkup();//очистить разметку
     newApiService.resetPage(); // cбрасываем страницу на 1ю
     runSimpleLightBox();// запустить lightbox
     fetchAll();//
+    loadMoreBtn.show();//показать кнопку
     
 
     
@@ -136,25 +146,30 @@ function fetchAll() {
     loadMoreBtn.disable();
     newApiService.fetchArticles()
         .then(data => {
-            console.log(data.totalHits)
-            if (data.totalHits === 0) {
-                noImagesFoundMessage();
-            }
-            if (newApiService.page === 2 && data.totalHits !== 0) {
-                imagesFoundMessage(data.totalHits);
-            }
-            if (newApiService.page - 1 !== 1) {
-                loadMoreBtn.hide();
-                endOfSearchMessage();
-
-            }
-            if (data.totalHits < 40) {
-                loadMoreBtn.hide();
-            }
-
+            const totalPage = Math.ceil(data.totalHits / 40);
+            console.log(totalPage);
             loadMoreBtn.enable();
             runMarkup(data.hits); //функция разметки
             lightbox.refresh(); // обновить lightbox
+           
+            if (data.totalHits === 0) {
+                loadMoreBtn.hide();
+                noImagesFoundMessage();
+            }
+            if (newApiService.page === 2 && data.totalHits !== 0) {
+
+                 imagesFoundMessage(data.totalHits);
+            }
+            if (totalPage < newApiService.page && newApiService.page > 2) {
+                loadMoreBtn.hide();
+                 endOfSearchMessage();
+            }
+            if (data.totalHits <= 40) {
+                loadMoreBtn.hide();
+            }
+         
+
+            
             
     });
 }
@@ -166,15 +181,6 @@ function runMarkup(c) {// создание разметки
 function clearMarkup() {// очистка разметки
     refs.getGallery.innerHTML = '';
 }
-
-function runSimpleLightBox() {
-    lightbox = new SimpleLightbox('.gallery .gallery__link', {
-        captionsData: 'alt',
-        captionDelay: 250,
-    });
-
-}
-
 
 
 
